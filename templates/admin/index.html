@@ -1,0 +1,99 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}
+<style>
+  .sf-dashboard { display: grid; gap: 16px; margin-bottom: 24px; }
+  .sf-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .sf-card { border: 1px solid var(--hairline-color); border-radius: 8px; padding: 14px; background: var(--body-bg); }
+  .sf-card strong { display: block; font-size: 24px; line-height: 1.1; margin-top: 6px; }
+  .sf-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+  .sf-list { margin: 0; padding: 0; list-style: none; }
+  .sf-list li { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--hairline-color); padding: 8px 0; }
+  .sf-list li:last-child { border-bottom: 0; }
+</style>
+{% endblock %}
+
+{% block content %}
+{% if smartfiq_dashboard %}
+<section class="sf-dashboard">
+  <div class="sf-kpis">
+    <div class="sf-card">Total Leads<strong>{{ smartfiq_dashboard.total_leads }}</strong></div>
+    <div class="sf-card">New Leads<strong>{{ smartfiq_dashboard.new_leads }}</strong></div>
+    <div class="sf-card">Subscribers<strong>{{ smartfiq_dashboard.subscribers }}</strong></div>
+    <div class="sf-card">Visitors Today<strong>{{ smartfiq_dashboard.visitors_today }}</strong></div>
+    <div class="sf-card">Visitors This Week<strong>{{ smartfiq_dashboard.visitors_week }}</strong></div>
+    <div class="sf-card">Indian / International<strong>{{ smartfiq_dashboard.indian_visitors }} / {{ smartfiq_dashboard.international_visitors }}</strong></div>
+    <div class="sf-card">Mobile / Desktop<strong>{{ smartfiq_dashboard.mobile_visitors }} / {{ smartfiq_dashboard.desktop_visitors }}</strong></div>
+  </div>
+
+  <div class="sf-grid">
+    <div class="sf-card">
+      <h2>Top Pages</h2>
+      <ul class="sf-list">
+        {% for page in smartfiq_dashboard.top_pages %}
+          <li><span>{{ page.current_page }}</span><strong>{{ page.total }}</strong></li>
+        {% empty %}
+          <li>No page data yet.</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="sf-card">
+      <h2>Recent Leads</h2>
+      <ul class="sf-list">
+        {% for lead in smartfiq_dashboard.recent_leads %}
+          <li><span>{{ lead.name }}</span><strong>{{ lead.status }}</strong></li>
+        {% empty %}
+          <li>No leads yet.</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="sf-card">
+      <h2>Recent Admin Activity</h2>
+      <ul class="sf-list">
+        {% for log in smartfiq_dashboard.recent_activity %}
+          <li><span>{{ log.action }}</span><strong>{{ log.username|default:"System" }}</strong></li>
+        {% empty %}
+          <li>No security activity yet.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if app_list %}
+  {% for app in app_list %}
+    <div class="app-{{ app.app_label }} module{% if app.app_url in request.path|urlencode %} current-app{% endif %}">
+      <table>
+        <caption>
+          <a href="{{ app.app_url }}" class="section" title="{% blocktranslate with name=app.name %}Models in the {{ name }} application{% endblocktranslate %}">{{ app.name }}</a>
+        </caption>
+        {% for model in app.models %}
+          <tr class="model-{{ model.object_name|lower }}{% if model.admin_url in request.path|urlencode %} current-model{% endif %}">
+            {% if model.admin_url %}
+              <th scope="row"><a href="{{ model.admin_url }}"{% if model.admin_url in request.path|urlencode %} aria-current="page"{% endif %}>{{ model.name }}</a></th>
+            {% else %}
+              <th scope="row">{{ model.name }}</th>
+            {% endif %}
+            {% if model.add_url %}
+              <td><a href="{{ model.add_url }}" class="addlink">{% translate "Add" %}</a></td>
+            {% else %}
+              <td></td>
+            {% endif %}
+            {% if model.admin_url and model.view_only %}
+              <td><a href="{{ model.admin_url }}" class="viewlink">{% translate "View" %}</a></td>
+            {% elif model.admin_url %}
+              <td><a href="{{ model.admin_url }}" class="changelink">{% translate "Change" %}</a></td>
+            {% else %}
+              <td></td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+  {% endfor %}
+{% else %}
+  <p>{% translate "You don't have permission to view or edit anything." %}</p>
+{% endif %}
+{% endblock %}
