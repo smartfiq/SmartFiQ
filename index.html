@@ -58,19 +58,16 @@
       ]
     }
     </script>
-    <!-- Preload Critical LCP Hero Image -->
+    <!-- Preload Critical LCP Hero Image & Logo -->
+    <link rel="preload" as="image" href="smartfiq-ai-automation-logo.webp" fetchpriority="high" />
     <link rel="preload" as="image" href="images/hero-desktop.webp" media="(min-width: 768px)" fetchpriority="high" />
     <link rel="preload" as="image" href="images/hero-mobile.webp" media="(max-width: 767px)" fetchpriority="high" />
 
     <!-- Google Fonts & Tailwind -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet" media="print" onload="this.media='all'" />
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" /></noscript>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-        rel="stylesheet" media="print" onload="this.media='all'" />
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" /></noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries" defer></script>
     <style>
         @keyframes headerSlideDown {
@@ -460,8 +457,63 @@
             </a>
         </div>
     </div>
-    <!-- Header Component (Loaded dynamically via components.js) -->
-    <div id="site-header"></div>
+    <!-- Header Component (Static for instant LCP discovery & hydrated by components.js) -->
+    <div id="site-header">
+        <header id="smartfiq-header" class="fixed top-[20px] left-1/2 -translate-x-1/2 z-[100] w-[calc(100%-2rem)] max-w-[1180px] h-[64px] rounded-full bg-[rgba(15,15,18,0.75)] backdrop-blur-[20px] border border-[rgba(255,255,255,0.12)] shadow-[0_12px_40px_rgba(0,0,0,0.35)] transition-all duration-300 ease-in-out font-plus-jakarta">
+            <div class="w-full h-full px-6 flex items-center justify-between relative">
+                <a href="index.html" class="flex items-center group">
+                    <img src="smartfiq-ai-automation-logo.webp" alt="SmartFiQ Logo" width="237" height="56" class="h-8 md:h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105" fetchpriority="high" decoding="async" />
+                </a>
+                <nav class="hidden md:flex items-center space-x-7 lg:space-x-9">
+                    <a href="index.html" class="relative py-1 text-[15px] font-medium tracking-[0.2px] text-[#FF6B3D] transition-colors duration-300 group">
+                        Home
+                        <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-[2px] bg-[#FF6B3D] rounded-full transition-all duration-300"></span>
+                    </a>
+                    <a href="services.html" class="relative py-1 text-[15px] font-medium tracking-[0.2px] text-[#B8B8B8] hover:text-[#FF6B3D] transition-colors duration-300 group">
+                        Services
+                        <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 group-hover:w-full h-[2px] bg-[#FF6B3D] rounded-full transition-all duration-300"></span>
+                    </a>
+                    <a href="industries.html" class="relative py-1 text-[15px] font-medium tracking-[0.2px] text-[#B8B8B8] hover:text-[#FF6B3D] transition-colors duration-300 group">
+                        Industries
+                        <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 group-hover:w-full h-[2px] bg-[#FF6B3D] rounded-full transition-all duration-300"></span>
+                    </a>
+                    <a href="case-studies.html" class="relative py-1 text-[15px] font-medium tracking-[0.2px] text-[#B8B8B8] hover:text-[#FF6B3D] transition-colors duration-300 group">
+                        Case Studies
+                        <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 group-hover:w-full h-[2px] bg-[#FF6B3D] rounded-full transition-all duration-300"></span>
+                    </a>
+                    <a href="blog.html" class="relative py-1 text-[15px] font-medium tracking-[0.2px] text-[#B8B8B8] hover:text-[#FF6B3D] transition-colors duration-300 group">
+                        Blog
+                        <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 group-hover:w-full h-[2px] bg-[#FF6B3D] rounded-full transition-all duration-300"></span>
+                    </a>
+                    <a href="about-smartfiq.html" class="relative py-1 text-[15px] font-medium tracking-[0.2px] text-[#B8B8B8] hover:text-[#FF6B3D] transition-colors duration-300 group">
+                        About
+                        <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 group-hover:w-full h-[2px] bg-[#FF6B3D] rounded-full transition-all duration-300"></span>
+                    </a>
+                </nav>
+                <div class="hidden md:flex items-center">
+                    <button onclick="openContactModal()" class="inline-flex items-center justify-center px-[24px] py-[10px] text-[14px] font-semibold text-white bg-gradient-to-r from-[#FF6B3D] to-[#FF3D00] rounded-full transition-all duration-300 ease-out hover:scale-[1.03] hover:shadow-[0_0_25px_rgba(255,107,61,0.5)] active:scale-95 cursor-pointer">
+                        Book Consultation &rarr;
+                    </button>
+                </div>
+                <button id="mobileMenuBtn" onclick="toggleSmartfiqMobileMenu()" class="md:hidden flex flex-col justify-center items-center w-9 h-9 text-white focus:outline-none p-1 rounded-full hover:bg-white/5 transition-colors" aria-label="Toggle Navigation Menu">
+                    <div id="bar1" class="w-5 h-[2px] bg-white rounded-full transition-all duration-300"></div>
+                    <div id="bar2" class="w-5 h-[2px] bg-white rounded-full transition-all duration-300 my-1"></div>
+                    <div id="bar3" class="w-5 h-[2px] bg-white rounded-full transition-all duration-300"></div>
+                </button>
+                <div id="smartfiqMobileDropdown" class="hidden md:hidden absolute top-[calc(100%+12px)] left-0 w-full bg-[rgba(15,15,18,0.95)] backdrop-blur-[24px] border border-[rgba(255,255,255,0.12)] p-6 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col gap-4 z-50">
+                    <a href="index.html" onclick="toggleSmartfiqMobileMenu()" class="text-[#FF6B3D] font-medium text-[16px] py-2 border-b border-white/5">Home</a>
+                    <a href="services.html" onclick="toggleSmartfiqMobileMenu()" class="text-[#B8B8B8] hover:text-[#FF6B3D] font-medium text-[16px] py-2 border-b border-white/5">Services</a>
+                    <a href="industries.html" onclick="toggleSmartfiqMobileMenu()" class="text-[#B8B8B8] hover:text-[#FF6B3D] font-medium text-[16px] py-2 border-b border-white/5">Industries</a>
+                    <a href="case-studies.html" onclick="toggleSmartfiqMobileMenu()" class="text-[#B8B8B8] hover:text-[#FF6B3D] font-medium text-[16px] py-2 border-b border-white/5">Case Studies</a>
+                    <a href="blog.html" onclick="toggleSmartfiqMobileMenu()" class="text-[#B8B8B8] hover:text-[#FF6B3D] font-medium text-[16px] py-2 border-b border-white/5">Blog</a>
+                    <a href="about-smartfiq.html" onclick="toggleSmartfiqMobileMenu()" class="text-[#B8B8B8] hover:text-[#FF6B3D] font-medium text-[16px] py-2 border-b border-white/5">About</a>
+                    <button onclick="openContactModal(); toggleSmartfiqMobileMenu();" class="w-full mt-2 inline-flex items-center justify-center px-[28px] py-[12px] text-[15px] font-semibold text-white bg-gradient-to-r from-[#FF6B3D] to-[#FF3D00] rounded-full transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_25px_rgba(255,107,61,0.5)] active:scale-95">
+                        Book Consultation &rarr;
+                    </button>
+                </div>
+            </div>
+        </header>
+    </div>
     <main class="relative overflow-hidden">
         <!-- Hero Section -->
         <section class="hero-section relative w-full mb-0 z-10 overflow-hidden">
