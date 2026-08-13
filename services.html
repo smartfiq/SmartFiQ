@@ -97,7 +97,7 @@
     rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
     rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="stylesheet" href="style.css" />
   <style>
     @keyframes headerSlideDown {
       from {
@@ -670,7 +670,7 @@
   <!-- Footer (Loaded via components.js) -->
   <div id="site-footer"></div>
 
-  <script src="components.js"></script>
+  <script src="components.js" defer></script>
   <script>
     // Default Services Fallback
     const DEFAULT_SERVICES = [
@@ -781,7 +781,7 @@
 
     document.addEventListener('DOMContentLoaded', loadPublicServices);
   </script>
-  <script src="cms-engine.js"></script>
+  <script src="cms-engine.js" defer></script>
 </body>
 
 </html>

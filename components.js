@@ -57,7 +57,7 @@
             <div class="w-full h-full px-6 flex items-center justify-between relative">
                 <!-- LEFT: Logo Image ONLY -->
                 <a href="${prefix}index.html" class="flex items-center group">
-                    <img src="${prefix}smartfiq-ai-automation-logo.webp" alt="SmartFiQ Logo" width="237" height="56" class="h-8 md:h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105" fetchpriority="high" decoding="async" />
+                    <img src="${prefix}smartfiq-ai-automation-logo.webp" alt="SmartFiQ Logo" width="237" height="56" class="h-8 md:h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105" decoding="async" />
                 </a>
 
                 <!-- CENTER: Navigation Links -->

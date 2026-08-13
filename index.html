@@ -58,8 +58,7 @@
       ]
     }
     </script>
-    <!-- Preload Critical LCP Hero Image & Logo -->
-    <link rel="preload" as="image" href="smartfiq-ai-automation-logo.webp" fetchpriority="high" />
+    <!-- Preload Critical LCP Hero Image -->
     <link rel="preload" as="image" href="images/hero-desktop.webp" media="(min-width: 768px)" fetchpriority="high" />
     <link rel="preload" as="image" href="images/hero-mobile.webp" media="(max-width: 767px)" fetchpriority="high" />
 
@@ -464,7 +463,7 @@
         <header id="smartfiq-header" class="fixed top-[20px] left-1/2 -translate-x-1/2 z-[100] w-[calc(100%-2rem)] max-w-[1180px] h-[64px] rounded-full bg-[rgba(15,15,18,0.75)] backdrop-blur-[20px] border border-[rgba(255,255,255,0.12)] shadow-[0_12px_40px_rgba(0,0,0,0.35)] transition-all duration-300 ease-in-out font-plus-jakarta">
             <div class="w-full h-full px-6 flex items-center justify-between relative">
                 <a href="index.html" class="flex items-center group">
-                    <img src="smartfiq-ai-automation-logo.webp" alt="SmartFiQ Logo" width="237" height="56" class="h-8 md:h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105" fetchpriority="high" decoding="async" />
+                    <img src="smartfiq-ai-automation-logo.webp" alt="SmartFiQ Logo" width="237" height="56" class="h-8 md:h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105" decoding="async" />
                 </a>
                 <nav class="hidden md:flex items-center space-x-7 lg:space-x-9">
                     <a href="index.html" class="relative py-1 text-[15px] font-medium tracking-[0.2px] text-[#FF6B3D] transition-colors duration-300 group">
@@ -943,45 +942,55 @@
                     <a href="blog/what-is-ai-automation-guide.html" class="group cursor-pointer block">
                         <div class="relative overflow-hidden rounded-2xl aspect-[4/3] mb-4 border border-white/10">
                             <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                width="400" height="300" loading="lazy" decoding="async"
+                                width="310" height="174" loading="lazy" decoding="async"
                                 alt="What is AI Automation? The Complete Business Guide"
-                                src="images/blog-ai-automation.webp" />
+                                src="images/blog-ai-automation-310.webp"
+                                srcset="images/blog-ai-automation-310.webp 310w, images/blog-ai-automation-620.webp 620w"
+                                sizes="(max-width: 768px) 100vw, 310px" />
                         </div>
                         <h4 class="font-bold text-sm text-white group-hover:text-primary transition-colors">What is AI Automation?</h4>
                     </a>
                     <a href="blog/whatsapp-automation-guide.html" class="group cursor-pointer block">
                         <div class="relative overflow-hidden rounded-2xl aspect-[4/3] mb-4 border border-white/10">
                             <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                width="400" height="300" loading="lazy" decoding="async"
+                                width="310" height="174" loading="lazy" decoding="async"
                                 alt="WhatsApp Automation Guide for Scaling Business Support"
-                                src="images/blog-whatsapp.webp" />
+                                src="images/blog-whatsapp-310.webp"
+                                srcset="images/blog-whatsapp-310.webp 310w, images/blog-whatsapp-620.webp 620w"
+                                sizes="(max-width: 768px) 100vw, 310px" />
                         </div>
                         <h4 class="font-bold text-sm text-white group-hover:text-primary transition-colors">WhatsApp Automation</h4>
                     </a>
                     <a href="blog/ai-voice-agents-vs-human-support.html" class="group cursor-pointer block">
                         <div class="relative overflow-hidden rounded-2xl aspect-[4/3] mb-4 border border-white/10">
                             <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                width="400" height="300" loading="lazy" decoding="async"
+                                width="310" height="174" loading="lazy" decoding="async"
                                 alt="AI Voice Agents vs Human Support ROI Guide"
-                                src="images/blog-ai-voice.webp" />
+                                src="images/blog-ai-voice-310.webp"
+                                srcset="images/blog-ai-voice-310.webp 310w, images/blog-ai-voice-620.webp 620w"
+                                sizes="(max-width: 768px) 100vw, 310px" />
                         </div>
                         <h4 class="font-bold text-sm text-white group-hover:text-primary transition-colors">AI Voice Agents ROI</h4>
                     </a>
                     <a href="blog/future-of-no-code-ai-automation.html" class="group cursor-pointer block">
                         <div class="relative overflow-hidden rounded-2xl aspect-[4/3] mb-4 border border-white/10">
                             <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                width="400" height="300" loading="lazy" decoding="async"
+                                width="310" height="174" loading="lazy" decoding="async"
                                 alt="The Future of No-Code AI Automation"
-                                src="images/blog-ai-chatbots.webp" />
+                                src="images/blog-ai-chatbots-310.webp"
+                                srcset="images/blog-ai-chatbots-310.webp 310w, images/blog-ai-chatbots-620.webp 620w"
+                                sizes="(max-width: 768px) 100vw, 310px" />
                         </div>
                         <h4 class="font-bold text-sm text-white group-hover:text-primary transition-colors">No-Code AI Future</h4>
                     </a>
                     <a href="blog/enterprise-ai-security-data-privacy.html" class="group cursor-pointer block">
                         <div class="relative overflow-hidden rounded-2xl aspect-[4/3] mb-4 border border-white/10">
                             <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                width="400" height="300" loading="lazy" decoding="async"
+                                width="310" height="174" loading="lazy" decoding="async"
                                 alt="Enterprise AI Security & Data Privacy Guidelines"
-                                src="images/blog-security.webp" />
+                                src="images/blog-security-310.webp"
+                                srcset="images/blog-security-310.webp 310w, images/blog-security-620.webp 620w"
+                                sizes="(max-width: 768px) 100vw, 310px" />
                         </div>
                         <h4 class="font-bold text-sm text-white group-hover:text-primary transition-colors">Enterprise Security</h4>
                     </a>
@@ -1130,8 +1139,8 @@
     <!-- Footer (Loaded via components.js) -->
     <div id="site-footer"></div>
 
-    <script src="components.js"></script>
-    <script src="cms-engine.js"></script>
+    <script src="components.js" defer></script>
+    <script src="cms-engine.js" defer></script>
 </body>
 
 </html>

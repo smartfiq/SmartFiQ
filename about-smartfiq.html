@@ -41,7 +41,7 @@
   ]
 }
 </script>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="stylesheet" href="style.css" />
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <style>
@@ -417,7 +417,7 @@
 <!-- Footer (Loaded via components.js) -->
 <div id="site-footer"></div>
 
-<script src="cms-engine.js"></script>
+<script src="cms-engine.js" defer></script>
 <script>
     async function renderAboutTeam() {
         const grid = document.getElementById('agency-team-grid');
@@ -465,6 +465,6 @@
     document.addEventListener('DOMContentLoaded', renderAboutTeam);
     window.addEventListener('smartfiq_cms_loaded', renderAboutTeam);
 </script>
-<script src="components.js"></script>
+<script src="components.js" defer></script>
 </body>
 </html>
