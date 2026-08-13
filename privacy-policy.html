@@ -187,13 +187,19 @@
     <script>
         async function loadPrivacyPolicy() {
             try {
-                const res = await fetch('/api/legal');
-                const data = await res.json();
-                if (data && data.privacyPolicy) {
-                    renderPrivacyContent(data.privacyPolicy);
+                const stored = localStorage.getItem('smartfiq_privacy');
+                if (stored) {
+                    const data = JSON.parse(stored);
+                    if (data && data.privacyPolicy) renderPrivacyContent(data.privacyPolicy);
+                } else if (window.ENABLE_API_CMS) {
+                    const res = await fetch('/api/legal');
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data && data.privacyPolicy) renderPrivacyContent(data.privacyPolicy);
+                    }
                 }
             } catch (err) {
-                console.warn('Using default Privacy Policy view:', err);
+                // Keep default static content
             }
         }
 

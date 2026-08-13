@@ -319,12 +319,9 @@
                 list = window.SmartfiqCMS.getCaseStudies();
             }
             if (!Array.isArray(list) || list.length === 0) {
-                try {
-                    const res = await fetch('/api/case-studies');
-                    const apiList = await res.json();
-                    if (Array.isArray(apiList) && apiList.length > 0) list = apiList;
-                } catch (e) {
-                    console.warn(e);
+                const stored = localStorage.getItem('smartfiq_case_studies');
+                if (stored) {
+                    try { list = JSON.parse(stored); } catch (e) {}
                 }
             }
 

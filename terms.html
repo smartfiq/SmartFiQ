@@ -178,13 +178,19 @@
     <script>
         async function loadTermsOfService() {
             try {
-                const res = await fetch('/api/legal');
-                const data = await res.json();
-                if (data && data.termsOfService) {
-                    renderTermsContent(data.termsOfService);
+                const stored = localStorage.getItem('smartfiq_terms');
+                if (stored) {
+                    const data = JSON.parse(stored);
+                    if (data && data.termsOfService) renderTermsContent(data.termsOfService);
+                } else if (window.ENABLE_API_CMS) {
+                    const res = await fetch('/api/legal');
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data && data.termsOfService) renderTermsContent(data.termsOfService);
+                    }
                 }
             } catch (err) {
-                console.warn('Using default Terms view:', err);
+                // Keep default static content
             }
         }
 

@@ -602,16 +602,21 @@
 
       let services = [];
       try {
-        const res = await fetch('/api/services');
-        if (res.ok) {
-          services = await res.json();
+        const stored = localStorage.getItem('smartfiq_services');
+        if (stored) {
+          services = JSON.parse(stored);
+        } else if (window.ENABLE_API_CMS) {
+          const res = await fetch('/api/services');
+          if (res.ok) {
+            services = await res.json();
+          } else {
+            services = DEFAULT_SERVICES;
+          }
         } else {
-          throw new Error('Response not OK');
+          services = DEFAULT_SERVICES;
         }
       } catch (err) {
-        console.warn('API load fallback to LocalStorage/Default', err);
-        const stored = localStorage.getItem('smartfiq_services');
-        services = stored ? JSON.parse(stored) : DEFAULT_SERVICES;
+        services = DEFAULT_SERVICES;
       }
 
       if (!services || services.length === 0) {

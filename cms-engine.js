@@ -78,10 +78,15 @@
             this.initPromise = (async () => {
                 // Load Agency Team
                 try {
-                    const res = await fetch('/api/agency-team');
-                    if (res.ok) {
-                        this.team = await res.json();
-                        localStorage.setItem('smartfiq_agency_team', JSON.stringify(this.team));
+                    const stored = localStorage.getItem('smartfiq_agency_team');
+                    if (stored) {
+                        this.team = JSON.parse(stored);
+                    } else if (window.ENABLE_API_CMS) {
+                        const res = await fetch('/api/agency-team');
+                        if (res.ok) {
+                            this.team = await res.json();
+                            localStorage.setItem('smartfiq_agency_team', JSON.stringify(this.team));
+                        }
                     }
                 } catch (err) {
                     const stored = localStorage.getItem('smartfiq_agency_team');
@@ -91,10 +96,15 @@
 
                 // Load Case Studies
                 try {
-                    const res = await fetch('/api/case-studies');
-                    if (res.ok) {
-                        this.caseStudies = await res.json();
-                        localStorage.setItem('smartfiq_case_studies', JSON.stringify(this.caseStudies));
+                    const stored = localStorage.getItem('smartfiq_case_studies');
+                    if (stored) {
+                        this.caseStudies = JSON.parse(stored);
+                    } else if (window.ENABLE_API_CMS) {
+                        const res = await fetch('/api/case-studies');
+                        if (res.ok) {
+                            this.caseStudies = await res.json();
+                            localStorage.setItem('smartfiq_case_studies', JSON.stringify(this.caseStudies));
+                        }
                     }
                 } catch (err) {
                     const stored = localStorage.getItem('smartfiq_case_studies');
@@ -138,7 +148,7 @@
                 if (stored) {
                     try { cms = JSON.parse(stored); } catch (e) {}
                 }
-                if (!cms) {
+                if (!cms && window.ENABLE_API_CMS) {
                     const res = await fetch('/api/cms');
                     if (res.ok) {
                         cms = await res.json();

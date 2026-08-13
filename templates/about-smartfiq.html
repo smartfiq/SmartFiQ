@@ -430,12 +430,8 @@
         if (window.SmartfiqCMS) {
             team = window.SmartfiqCMS.getAgencyTeam();
         } else {
-            try {
-                const res = await fetch('/api/agency-team');
-                team = await res.json();
-            } catch (e) {
-                console.warn(e);
-            }
+            const stored = localStorage.getItem('smartfiq_agency_team');
+            team = stored ? JSON.parse(stored) : [];
         }
 
         if (!team || team.length === 0) return;
