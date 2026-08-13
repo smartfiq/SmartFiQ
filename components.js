@@ -57,7 +57,7 @@
             <div class="w-full h-full px-6 flex items-center justify-between relative">
                 <!-- LEFT: Logo Image ONLY -->
                 <a href="${prefix}index.html" class="flex items-center group">
-                    <img src="${prefix}smartfiq-ai-automation-logo.png" alt="SmartFiQ Logo" class="h-8 md:h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
+                    <img src="${prefix}smartfiq-ai-automation-logo.webp" alt="SmartFiQ Logo" width="237" height="56" class="h-8 md:h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105" fetchpriority="high" decoding="async" />
                 </a>
 
                 <!-- CENTER: Navigation Links -->
@@ -123,7 +123,7 @@
                 <div class="col-span-1 md:col-span-2">
                     <!-- Logo Image ONLY -->
                     <a href="${prefix}index.html" class="inline-block h-10 mb-6 hover:opacity-90 transition-opacity">
-                        <img alt="SmartFiQ Logo" class="h-full w-auto object-contain" src="${prefix}smartfiq-ai-automation-logo.png" />
+                        <img alt="SmartFiQ Logo" width="237" height="56" class="h-full w-auto object-contain" src="${prefix}smartfiq-ai-automation-logo.webp" loading="lazy" decoding="async" />
                     </a>
                     <p class="text-[#E7BDB2] text-sm max-w-xs mb-6 leading-relaxed">
                         Empowering businesses through cutting-edge AI, WhatsApp automations, and intelligent voice agents. Built for the modern enterprise.
