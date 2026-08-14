@@ -270,15 +270,6 @@
             grid.innerHTML = html;
         }
 
-        function submitNewsletter(e) {
-            e.preventDefault();
-            const status = document.getElementById('newsletter-status');
-            if (status) {
-                status.classList.remove('hidden');
-                setTimeout(() => status.classList.add('hidden'), 3500);
-            }
-        }
-
         document.addEventListener('DOMContentLoaded', renderBentoGrid);
     </script>
 </body>

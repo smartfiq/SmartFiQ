@@ -131,22 +131,28 @@
         async function fetchLeads() {
             try {
                 const res = await fetch('/api/admin/leads');
-                const data = await res.json();
-                allFormLeads = data.formLeads || [];
-                allSubLeads = data.subscribers || [];
-
-                document.getElementById('stat-form-count').innerText = allFormLeads.length;
-                document.getElementById('stat-sub-count').innerText = allSubLeads.length;
-                document.getElementById('stat-total-count').innerText = allFormLeads.length + allSubLeads.length;
-
-                document.getElementById('tab-form-cnt').innerText = allFormLeads.length;
-                document.getElementById('tab-sub-cnt').innerText = allSubLeads.length;
-
-                renderFormLeads(allFormLeads);
-                renderSubLeads(allSubLeads);
+                if (res.ok) {
+                    const data = await res.json();
+                    allFormLeads = data.formLeads || [];
+                    allSubLeads = data.subscribers || [];
+                } else {
+                    throw new Error('API offline');
+                }
             } catch (err) {
-                console.error('Failed to fetch leads:', err);
+                // Fallback to locally stored leads
+                allFormLeads = JSON.parse(localStorage.getItem('smartfiq_form_leads') || '[]');
+                allSubLeads = JSON.parse(localStorage.getItem('smartfiq_sub_leads') || '[]');
             }
+
+            document.getElementById('stat-form-count').innerText = allFormLeads.length;
+            document.getElementById('stat-sub-count').innerText = allSubLeads.length;
+            document.getElementById('stat-total-count').innerText = allFormLeads.length + allSubLeads.length;
+
+            document.getElementById('tab-form-cnt').innerText = allFormLeads.length;
+            document.getElementById('tab-sub-cnt').innerText = allSubLeads.length;
+
+            renderFormLeads(allFormLeads);
+            renderSubLeads(allSubLeads);
         }
 
         function renderFormLeads(leads) {

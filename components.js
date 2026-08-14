@@ -1,6 +1,55 @@
-// SmartFiQ Central Web Components & Layout Manager (components.js)
+// SmartFiQ Central Web Components, Layout & Telegram Lead Dispatcher (components.js)
 
 (function () {
+    const TELEGRAM_BOT_TOKEN = '8841778238:AAHOmeQHKc8MiBpOTnov-defOCzBHdIkOI0';
+    const TELEGRAM_CHAT_ID = '-5570843599';
+
+    // Helper: Send formatted message to Telegram Bot
+    async function sendTelegramNotification(htmlMessage) {
+        try {
+            const endpoint = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+            const res = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: TELEGRAM_CHAT_ID,
+                    text: htmlMessage,
+                    parse_mode: 'HTML'
+                })
+            });
+            const data = await res.json();
+            return data.ok;
+        } catch (err) {
+            console.error('Telegram notification error:', err);
+            return false;
+        }
+    }
+
+    // Helper: Store lead locally for Admin Panel & fallback
+    function saveLeadLocally(type, leadData) {
+        try {
+            const key = type === 'subscriber' ? 'smartfiq_sub_leads' : 'smartfiq_form_leads';
+            const existing = JSON.parse(localStorage.getItem(key) || '[]');
+            existing.unshift({
+                id: 'lead_' + Date.now(),
+                ...leadData,
+                timestamp: new Date().toISOString()
+            });
+            localStorage.setItem(key, JSON.stringify(existing.slice(0, 200)));
+        } catch (e) {
+            console.warn('localStorage save failed:', e);
+        }
+    }
+
+    // Helper: Format Current Date & Time
+    function getFormattedTime() {
+        return new Date().toLocaleString('en-IN', {
+            timeZone: 'Asia/Kolkata',
+            dateStyle: 'medium',
+            timeStyle: 'short'
+        });
+    }
+
     const rawPath = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/';
     let prefix = '';
     if (rawPath.includes('/industries/') || rawPath.includes('/blog/') || rawPath.includes('/case-studies/') || rawPath.includes('/services/')) {
@@ -172,7 +221,7 @@
                         <li><a class="hover:text-[#ff5625] transition-colors inline-block" href="${prefix}privacy-policy.html">Privacy Policy</a></li>
                         <li><a class="hover:text-[#ff5625] transition-colors inline-block" href="${prefix}terms.html">Terms of Service</a></li>
                         <li>
-                            <button onclick="openContactModal()" class="inline-flex items-center gap-1.5 text-[#ff5625] hover:text-white transition-colors font-bold text-xs uppercase tracking-wider mt-1">
+                            <button onclick="openContactModal()" class="inline-flex items-center gap-1.5 text-[#ff5625] hover:text-white transition-colors font-bold text-xs uppercase tracking-wider mt-1 cursor-pointer">
                                 <span class="material-symbols-outlined text-sm">support_agent</span> Contact Support
                             </button>
                         </li>
@@ -201,7 +250,7 @@
         modalEl.innerHTML = `
         <div id="contactModal" style="display: none;" class="fixed inset-0 z-[200] hidden items-center justify-center bg-black/80 backdrop-blur-md p-4 transition-all duration-300 opacity-0">
             <div class="glass-card relative w-full max-w-lg bg-[#0F0F12]/95 border border-white/12 rounded-2xl p-6 md:p-8 shadow-2xl transition-all duration-300 scale-95 text-left">
-                <button onclick="closeContactModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-white/5">
+                <button onclick="closeContactModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-white/5 cursor-pointer">
                     <span class="material-symbols-outlined">close</span>
                 </button>
                 <div class="mb-6">
@@ -249,7 +298,7 @@
         `;
     }
 
-    // --- Global Controls ---
+    // --- Global Modal Controls ---
     window.toggleSmartfiqMobileMenu = function () {
         const dropdown = document.getElementById('smartfiqMobileDropdown');
         if (dropdown) dropdown.classList.toggle('hidden');
@@ -285,35 +334,215 @@
         }
     };
 
-    window.submitModalLead = function (event) {
-        event.preventDefault();
-        const status = document.getElementById('modalFormStatus');
+    // --- TELEGRAM FORM HANDLERS ---
+
+    // 1. Modal Lead Form Submission
+    window.submitModalLead = async function (event) {
+        if (event) event.preventDefault();
         const submitBtn = document.getElementById('modalSubmitBtn');
+        const status = document.getElementById('modalFormStatus');
+
+        const name = (document.getElementById('modalName')?.value || '').trim();
+        const email = (document.getElementById('modalEmail')?.value || '').trim();
+        const phone = (document.getElementById('modalPhone')?.value || '').trim();
+        const budget = (document.getElementById('modalBudget')?.value || '').trim();
+        const message = (document.getElementById('modalMessage')?.value || '').trim();
+        const pageUrl = window.location.href;
+        const timestamp = getFormattedTime();
+
         if (submitBtn) {
             submitBtn.disabled = true;
-            submitBtn.innerText = 'Submitting...';
+            submitBtn.innerText = 'Submitting to Telegram...';
         }
+
+        const telegramText = `🔥 <b>New Lead (Consultation Modal) - SmartFiQ</b>\n` +
+            `━━━━━━━━━━━━━━━━━━━━\n` +
+            `👤 <b>Name:</b> ${name || 'N/A'}\n` +
+            `📧 <b>Email:</b> ${email || 'N/A'}\n` +
+            `📞 <b>Phone:</b> ${phone || 'N/A'}\n` +
+            `💰 <b>Budget:</b> ${budget || 'N/A'}\n` +
+            `📝 <b>Requirements:</b>\n<i>${message || 'None provided'}</i>\n` +
+            `━━━━━━━━━━━━━━━━━━━━\n` +
+            `🌐 <b>Source:</b> ${pageUrl}\n` +
+            `⏱ <b>Time:</b> ${timestamp}`;
+
+        // Save locally
+        saveLeadLocally('form', { name, email, phone, budget, message, source: pageUrl });
+
+        // Dispatch to Telegram
+        await sendTelegramNotification(telegramText);
+
+        if (status) {
+            status.classList.remove('hidden');
+            status.classList.add('flex');
+        }
+
+        if (submitBtn) {
+            submitBtn.innerText = '✓ Submitted!';
+        }
+
+        // Reset form
+        const form = document.getElementById('modalContactForm');
+        if (form) form.reset();
+
         setTimeout(() => {
+            window.closeContactModal();
             if (status) {
-                status.classList.remove('hidden');
-                status.classList.add('flex');
+                status.classList.add('hidden');
+                status.classList.remove('flex');
             }
             if (submitBtn) {
                 submitBtn.disabled = false;
                 submitBtn.innerText = 'Submit & Book Call';
             }
-            setTimeout(() => {
-                window.closeContactModal();
-                if (status) status.classList.add('hidden');
-            }, 2500);
-        }, 800);
+        }, 2200);
     };
+
+    // 2. Homepage / Inline Contact Form Submission
+    window.submitInlineLead = async function (event) {
+        if (event) event.preventDefault();
+        const submitBtn = document.getElementById('inlineSubmitBtn');
+        const status = document.getElementById('inlineFormStatus');
+
+        const name = (document.getElementById('contactName')?.value || '').trim();
+        const email = (document.getElementById('contactEmail')?.value || '').trim();
+        const phone = (document.getElementById('contactPhone')?.value || '').trim();
+        const budgetSelect = document.getElementById('contactBudget');
+        const budget = budgetSelect ? budgetSelect.options[budgetSelect.selectedIndex]?.text || budgetSelect.value : 'N/A';
+        const message = (document.getElementById('contactMessage')?.value || '').trim();
+        const pageUrl = window.location.href;
+        const timestamp = getFormattedTime();
+
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<span>Sending...</span>`;
+        }
+
+        const telegramText = `🔥 <b>New Lead (Inline Contact Form) - SmartFiQ</b>\n` +
+            `━━━━━━━━━━━━━━━━━━━━\n` +
+            `👤 <b>Name:</b> ${name || 'N/A'}\n` +
+            `📧 <b>Email:</b> ${email || 'N/A'}\n` +
+            `📞 <b>Phone:</b> ${phone || 'N/A'}\n` +
+            `💰 <b>Budget:</b> ${budget || 'N/A'}\n` +
+            `📝 <b>Requirements:</b>\n<i>${message || 'None provided'}</i>\n` +
+            `━━━━━━━━━━━━━━━━━━━━\n` +
+            `🌐 <b>Source:</b> ${pageUrl}\n` +
+            `⏱ <b>Time:</b> ${timestamp}`;
+
+        // Save locally
+        saveLeadLocally('form', { name, email, phone, budget, message, source: pageUrl });
+
+        // Dispatch to Telegram
+        await sendTelegramNotification(telegramText);
+
+        if (status) {
+            status.classList.remove('hidden');
+            status.classList.add('flex');
+        }
+
+        if (submitBtn) {
+            submitBtn.innerHTML = `<span>✓ Message Sent!</span>`;
+        }
+
+        const form = document.getElementById('inlineContactForm');
+        if (form) form.reset();
+
+        setTimeout(() => {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<span>Send Message</span>`;
+            }
+            if (status) {
+                status.classList.add('hidden');
+                status.classList.remove('flex');
+            }
+        }, 4000);
+    };
+
+    // 3. Newsletter / Subscribe Form Submission
+    window.submitNewsletter = async function (event) {
+        if (event) event.preventDefault();
+        const form = event ? (event.target.tagName === 'FORM' ? event.target : event.target.closest('form')) : null;
+        
+        let emailInput = form ? form.querySelector('input[type="email"]') : document.querySelector('input[type="email"]');
+        const email = emailInput ? emailInput.value.trim() : '';
+
+        if (!email) return;
+
+        const submitBtn = form ? form.querySelector('button[type="submit"]') : null;
+        const originalBtnText = submitBtn ? submitBtn.innerHTML : '';
+
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Subscribing...';
+        }
+
+        const pageUrl = window.location.href;
+        const timestamp = getFormattedTime();
+
+        const telegramText = `📬 <b>New Newsletter Subscriber - SmartFiQ</b>\n` +
+            `━━━━━━━━━━━━━━━━━━━━\n` +
+            `📧 <b>Email:</b> ${email}\n` +
+            `🌐 <b>Source Page:</b> ${pageUrl}\n` +
+            `⏱ <b>Time:</b> ${timestamp}`;
+
+        // Save locally
+        saveLeadLocally('subscriber', { email, source: pageUrl });
+
+        // Dispatch to Telegram
+        await sendTelegramNotification(telegramText);
+
+        // Find status element
+        const status = (form ? form.querySelector('.newsletter-status') : null) || 
+                       document.getElementById('newsletter-status') ||
+                       document.querySelector('.newsletter-status');
+
+        if (status) {
+            status.classList.remove('hidden');
+            status.classList.add('flex');
+        }
+
+        if (emailInput) emailInput.value = '';
+
+        if (submitBtn) {
+            submitBtn.innerText = '✓ Subscribed!';
+            setTimeout(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+            }, 3000);
+        }
+
+        if (status) {
+            setTimeout(() => {
+                status.classList.add('hidden');
+                status.classList.remove('flex');
+            }, 4000);
+        }
+    };
+
+    // Global Fallback Event Listener for all Form Submissions
+    function attachGlobalFormListeners() {
+        document.querySelectorAll('form').forEach(f => {
+            if (f.id === 'modalContactForm' || f.id === 'inlineContactForm') return;
+            
+            const emailInput = f.querySelector('input[type="email"]');
+            const isNewsletter = emailInput && (f.innerText.toLowerCase().includes('subscribe') || f.getAttribute('onsubmit')?.includes('submitNewsletter'));
+            
+            if (isNewsletter && !f.dataset.tgAttached) {
+                f.dataset.tgAttached = "true";
+                f.addEventListener('submit', function (e) {
+                    window.submitNewsletter(e);
+                });
+            }
+        });
+    }
 
     // --- Init Components ---
     function initComponents() {
         renderHeader();
         renderFooter();
         renderContactModal();
+        attachGlobalFormListeners();
     }
 
     if (document.readyState === 'loading') {

@@ -1,0 +1,22 @@
+# SmartFiQ Project Guidelines & AI Assistant Rules
+
+## MANDATORY WORKFLOW INSTRUCTIONS
+
+1. **Read `PROJECT_LOG.md` First**:
+   - Before taking any action or writing code for ANY user prompt, the AI assistant MUST ALWAYS read `PROJECT_LOG.md` in the workspace root to understand the current project state, active integrations, and history.
+
+2. **Log Every Step**:
+   - Every time changes, fixes, refactorings, or new features are implemented, the AI assistant MUST update `PROJECT_LOG.md` with details of what was done, files modified, and verification steps.
+
+3. **Design & Alignment Standards**:
+   - Consistent container sizing: Always use `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8` (or `max-w-[1280px] mx-auto px-6`) across all page sections to prevent full-bleed stretching and ensure uniform margins/padding on mobile, tablet, and desktop screens.
+   - Dark mode default (`#0A0A0A` / `#0E0E0E`, text `#e5e2e1`, accent `#ff5625` / `#FF6B3D`).
+   - Use `primary-btn`, `glass-panel`, `glass-card`, and `lava-gradient-text` utility classes.
+
+4. **Templates & Root Synchronization**:
+   - Always ensure changes in root HTML files (`index.html`, `services.html`, `about-smartfiq.html`, `blog.html`, etc.) are synchronized with their respective files inside `templates/`.
+
+5. **Telegram Integration**:
+   - All forms (Consultation modal, inline contact, newsletter subscriptions) are centralized through `components.js` using:
+     - Bot Token: `8841778238:AAHOmeQHKc8MiBpOTnov-defOCzBHdIkOI0`
+     - Chat ID: `-5570843599`

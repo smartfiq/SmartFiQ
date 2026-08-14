@@ -1,0 +1,6 @@
+bhai sunn photos me etni saari duplixate pictute h insbko ek hi kro duplicate remve and saare html templates wale me daalo bahar nhi 
+
+
+and ek system prompt dalo es project me ki abhi tk jo bhi esme kia us md file me update kre maijo bhi prompt du phle md file pdhe
+
+koi steps le and jo steps le vo bhi md file me update kre 
