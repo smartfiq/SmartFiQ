@@ -1,131 +1,261 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html lang="en">
 <head>
-<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SmartFiQ Leads Admin Panel</title>
-    <link rel="icon" type="image/jpeg" href="/favicon.jpeg">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <link rel="icon" type="image/jpeg" href="favicon.jpeg" />
+    <link rel="apple-touch-icon" href="smartfiq-ai-automation-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../style.css" />
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #080C14; color: #E2E8F0; }
-        .glass-card { background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .lava-gradient-text { background: linear-gradient(135deg, #FF6B3D 0%, #FF3D00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        body { 
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; 
+            background-color: #F8FAFC; 
+            color: #0F172A; 
+        }
+        .admin-card { 
+            background: #FFFFFF; 
+            border: 1px solid #E2E8F0; 
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05); 
+        }
+        .admin-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        }
+        .lava-gradient-text { 
+            background: linear-gradient(135deg, #FF6B3D 0%, #FF3D00 100%); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+        .btn-lava {
+            background: linear-gradient(135deg, #FF6B3D 0%, #FF3D00 100%);
+            color: #FFFFFF;
+            transition: all 0.2s ease;
+        }
+        .btn-lava:hover {
+            box-shadow: 0 4px 14px rgba(255, 86, 37, 0.35);
+            transform: translateY(-1px);
+        }
     </style>
 </head>
-<body class="min-h-screen p-4 sm:p-8 space-y-8 bg-[#0b0f19] text-gray-200 min-h-screen">
+<body class="min-h-screen bg-[#F8FAFC] text-slate-800 antialiased p-4 sm:p-8">
 
-    <!-- Top Admin Header -->
-    <header class="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 glass-card p-6 rounded-2xl">
-        <div class="flex items-center gap-3">
-            <img src="/smartfiq-ai-automation-logo.png" alt="SmartFiQ Logo" class="h-8 w-auto" / fetchpriority="high" loading="eager" decoding="async" />
-            <div>
-                <h1 class="text-xl font-bold text-white">Leads Control Center</h1>
-                <p class="text-xs text-gray-400">Live Customer Leads & Newsletter Subscriptions</p>
+    <!-- LOGIN GATE OVERLAY -->
+    <div id="login-gate" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+        <div class="w-full max-w-md bg-white rounded-3xl p-8 sm:p-10 shadow-2xl border border-slate-200">
+            <div class="text-center space-y-3 mb-8">
+                <div class="inline-flex p-3 rounded-2xl bg-orange-50 border border-orange-100 text-[#FF5625] mb-2 shadow-sm">
+                    <span class="material-symbols-outlined text-3xl">shield_person</span>
+                </div>
+                <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Admin Sign In</h2>
+                <p class="text-xs sm:text-sm text-slate-500 font-medium">SmartFiQ Leads & Intelligence Dashboard</p>
             </div>
-        </div>
 
-        <div class="flex items-center gap-3 w-full sm:w-auto">
-            <button onclick="fetchLeads()" class="px-4 py-2 text-xs font-semibold text-white bg-white/10 hover:bg-white/20 rounded-xl transition-colors flex items-center gap-2">
-                🔄 Refresh Leads
-            </button>
-            <button onclick="exportCSV()" class="px-5 py-2 text-xs font-bold text-white bg-gradient-to-r from-[#FF6B3D] to-[#FF3D00] rounded-xl hover:scale-105 transition-all shadow-lg">
-                📥 Export CSV
-            </button>
-            <a href="/" class="px-4 py-2 text-xs font-semibold text-gray-300 hover:text-white transition-colors">
-                ← Back to Site
-            </a>
-        </div>
-    </header>
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-5">
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Username</label>
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg">person</span>
+                        <input type="text" id="adminUser" required placeholder="smartfiq"
+                            class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:border-[#FF5625] focus:ring-2 focus:ring-[#FF5625]/20 outline-none transition-all" />
+                    </div>
+                </div>
 
-    <main class="max-w-7xl mx-auto space-y-8">
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Password</label>
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg">lock</span>
+                        <input type="password" id="adminPass" required placeholder="••••••••••••"
+                            class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:border-[#FF5625] focus:ring-2 focus:ring-[#FF5625]/20 outline-none transition-all" />
+                    </div>
+                </div>
+
+                <div id="loginError" class="hidden p-3 rounded-xl bg-red-50 border border-red-200 text-red-600 text-xs font-semibold flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">error</span>
+                    <span>Invalid username or password. Please try again.</span>
+                </div>
+
+                <button type="submit" class="w-full py-3.5 rounded-xl font-bold btn-lava text-sm flex items-center justify-center gap-2 shadow-md cursor-pointer">
+                    <span>Unlock Dashboard</span>
+                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN ADMIN DASHBOARD (Initially Hidden until Logged In) -->
+    <div id="admin-app" class="hidden max-w-7xl mx-auto space-y-8">
+
+        <!-- Top Admin Header -->
+        <header class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 admin-card p-6 rounded-2xl">
+            <div class="flex items-center gap-4">
+                <img src="/smartfiq-ai-automation-logo.webp" alt="SmartFiQ Logo" class="h-8 w-auto" loading="eager" />
+                <div>
+                    <h1 class="text-xl font-extrabold text-slate-900">Leads Control Center</h1>
+                    <p class="text-xs text-slate-500 font-medium">Live Customer Inquiries & Newsletter Subscriptions</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 w-full sm:w-auto flex-wrap">
+                <button onclick="fetchLeads()" class="px-4 py-2.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl transition-all flex items-center gap-2 cursor-pointer shadow-sm">
+                    <span class="material-symbols-outlined text-sm">refresh</span>
+                    <span>Refresh</span>
+                </button>
+                <button onclick="exportCSV()" class="px-5 py-2.5 text-xs font-bold btn-lava rounded-xl flex items-center gap-2 cursor-pointer shadow-md">
+                    <span class="material-symbols-outlined text-sm">download</span>
+                    <span>Export CSV</span>
+                </button>
+                <a href="/" class="px-4 py-2.5 text-xs font-semibold text-slate-600 hover:text-slate-900 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl transition-colors">
+                    ← Back to Website
+                </a>
+                <button onclick="handleLogout()" class="px-3.5 py-2.5 text-xs font-bold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer">
+                    <span class="material-symbols-outlined text-sm">logout</span>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </header>
 
         <!-- Stat Cards -->
         <section class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <div class="glass-card p-6 rounded-2xl space-y-1">
-                <div class="text-xs text-gray-400 uppercase tracking-wider font-semibold">Form Leads</div>
+            <div class="admin-card p-6 rounded-2xl space-y-2 border-l-4 border-l-[#FF6B3D]">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-slate-500 uppercase tracking-wider font-bold">Form Leads</span>
+                    <span class="p-2 rounded-xl bg-orange-50 text-[#FF5625] material-symbols-outlined text-lg">contact_mail</span>
+                </div>
                 <div id="stat-form-count" class="text-3xl font-extrabold lava-gradient-text">0</div>
+                <div class="text-xs text-slate-400 font-medium">Consultation & inline submissions</div>
             </div>
-            <div class="glass-card p-6 rounded-2xl space-y-1">
-                <div class="text-xs text-gray-400 uppercase tracking-wider font-semibold">Subscriber Leads</div>
-                <div id="stat-sub-count" class="text-3xl font-extrabold lava-gradient-text">0</div>
+
+            <div class="admin-card p-6 rounded-2xl space-y-2 border-l-4 border-l-blue-500">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-slate-500 uppercase tracking-wider font-bold">Subscribers</span>
+                    <span class="p-2 rounded-xl bg-blue-50 text-blue-600 material-symbols-outlined text-lg">mark_email_read</span>
+                </div>
+                <div id="stat-sub-count" class="text-3xl font-extrabold text-blue-600">0</div>
+                <div class="text-xs text-slate-400 font-medium">Newsletter signups across site</div>
             </div>
-            <div class="glass-card p-6 rounded-2xl space-y-1">
-                <div class="text-xs text-gray-400 uppercase tracking-wider font-semibold">Total Captured</div>
-                <div id="stat-total-count" class="text-3xl font-extrabold text-white">0</div>
+
+            <div class="admin-card p-6 rounded-2xl space-y-2 border-l-4 border-l-emerald-500">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-slate-500 uppercase tracking-wider font-bold">Total Inquiries</span>
+                    <span class="p-2 rounded-xl bg-emerald-50 text-emerald-600 material-symbols-outlined text-lg">groups</span>
+                </div>
+                <div id="stat-total-count" class="text-3xl font-extrabold text-slate-900">0</div>
+                <div class="text-xs text-slate-400 font-medium">Combined pipeline database</div>
             </div>
         </section>
 
         <!-- Search & Filter Controls -->
-        <section class="flex flex-col sm:flex-row items-center justify-between gap-4 glass-card p-4 rounded-2xl">
+        <section class="flex flex-col sm:flex-row items-center justify-between gap-4 admin-card p-4 rounded-2xl">
             <!-- Tabs -->
-            <div class="flex items-center bg-white/5 p-1 rounded-xl w-full sm:w-auto">
-                <button id="tab-form" onclick="switchTab('form')" class="px-5 py-2 text-xs font-bold rounded-lg text-white bg-[#FF6B3D] transition-all">
-                    📋 Form Leads (<span id="tab-form-cnt">0</span>)
+            <div class="flex items-center bg-slate-100 p-1.5 rounded-xl w-full sm:w-auto border border-slate-200">
+                <button id="tab-form" onclick="switchTab('form')" class="px-5 py-2 text-xs font-bold rounded-lg text-white btn-lava shadow-sm transition-all cursor-pointer">
+                    📋 Form Inquiries (<span id="tab-form-cnt">0</span>)
                 </button>
-                <button id="tab-sub" onclick="switchTab('sub')" class="px-5 py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition-all">
-                    📧 Subscribers (<span id="tab-sub-cnt">0</span>)
+                <button id="tab-sub" onclick="switchTab('sub')" class="px-5 py-2 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900 transition-all cursor-pointer">
+                    📧 Email Subscribers (<span id="tab-sub-cnt">0</span>)
                 </button>
             </div>
 
             <!-- Search -->
-            <div class="w-full sm:w-72">
-                <input type="text" id="searchInput" oninput="filterLeads()" placeholder="Search lead name, email, phone..." 
-                       class="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#FF6B3D]" />
+            <div class="w-full sm:w-80">
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-base">search</span>
+                    <input type="text" id="searchInput" oninput="filterLeads()" placeholder="Search name, email, phone, budget..." 
+                        class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:bg-white focus:border-[#FF5625] outline-none transition-colors" />
+                </div>
             </div>
         </section>
 
         <!-- Form Leads Table -->
-        <section id="section-form-leads" class="glass-card rounded-2xl overflow-hidden">
+        <section id="section-form-leads" class="admin-card rounded-2xl overflow-hidden shadow-sm">
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-xs">
-                    <thead class="bg-white/5 text-gray-400 font-semibold border-b border-white/10 uppercase tracking-wider">
+                    <thead class="bg-slate-50 text-slate-500 font-bold border-b border-slate-200 uppercase tracking-wider">
                         <tr>
                             <th class="p-4">Date / Time</th>
-                            <th class="p-4">Name</th>
+                            <th class="p-4">Client Name</th>
                             <th class="p-4">Email</th>
                             <th class="p-4">Phone</th>
-                            <th class="p-4">Budget</th>
+                            <th class="p-4">Budget (INR)</th>
                             <th class="p-4">Requirement / Message</th>
-                            <th class="p-4">Source</th>
+                            <th class="p-4">Source Page</th>
                             <th class="p-4 text-right">Action</th>
                         </tr>
                     </thead>
-                    <tbody id="form-leads-tbody" class="divide-y divide-white/5 text-gray-300">
-                        <tr><td colspan="8" class="p-8 text-center text-gray-500">Loading leads...</td></tr>
+                    <tbody id="form-leads-tbody" class="divide-y divide-slate-100 text-slate-700 bg-white">
+                        <tr><td colspan="8" class="p-8 text-center text-slate-400">Loading inquiries...</td></tr>
                     </tbody>
                 </table>
             </div>
         </section>
 
         <!-- Subscriber Leads Table -->
-        <section id="section-sub-leads" class="glass-card rounded-2xl overflow-hidden hidden">
+        <section id="section-sub-leads" class="admin-card rounded-2xl overflow-hidden hidden shadow-sm">
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-xs">
-                    <thead class="bg-white/5 text-gray-400 font-semibold border-b border-white/10 uppercase tracking-wider">
+                    <thead class="bg-slate-50 text-slate-500 font-bold border-b border-slate-200 uppercase tracking-wider">
                         <tr>
                             <th class="p-4">Subscribed Date</th>
                             <th class="p-4">Subscriber Email</th>
-                            <th class="p-4">Source</th>
+                            <th class="p-4">Source Page</th>
                             <th class="p-4 text-right">Action</th>
                         </tr>
                     </thead>
-                    <tbody id="sub-leads-tbody" class="divide-y divide-white/5 text-gray-300">
-                        <tr><td colspan="4" class="p-8 text-center text-gray-500">Loading subscribers...</td></tr>
+                    <tbody id="sub-leads-tbody" class="divide-y divide-slate-100 text-slate-700 bg-white">
+                        <tr><td colspan="4" class="p-8 text-center text-slate-400">Loading subscribers...</td></tr>
                     </tbody>
                 </table>
             </div>
         </section>
 
-    </main>
+    </div>
 
     <script>
+        const AUTH_USER = 'smartfiq';
+        const AUTH_PASS = 'smartfiqlead';
+
         let allFormLeads = [];
         let allSubLeads = [];
         let activeTab = 'form';
+
+        function checkAuth() {
+            const isAuth = sessionStorage.getItem('smartfiq_admin_auth') === 'true';
+            const gate = document.getElementById('login-gate');
+            const app = document.getElementById('admin-app');
+
+            if (isAuth) {
+                gate.classList.add('hidden');
+                app.classList.remove('hidden');
+                fetchLeads();
+            } else {
+                gate.classList.remove('hidden');
+                app.classList.add('hidden');
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('adminUser').value.trim();
+            const p = document.getElementById('adminPass').value.trim();
+            const error = document.getElementById('loginError');
+
+            if (u === AUTH_USER && p === AUTH_PASS) {
+                sessionStorage.setItem('smartfiq_admin_auth', 'true');
+                error.classList.add('hidden');
+                checkAuth();
+            } else {
+                error.classList.remove('hidden');
+            }
+        }
+
+        function handleLogout() {
+            sessionStorage.removeItem('smartfiq_admin_auth');
+            checkAuth();
+        }
 
         async function fetchLeads() {
             try {
@@ -156,20 +286,20 @@
         function renderFormLeads(leads) {
             const tbody = document.getElementById('form-leads-tbody');
             if (!leads.length) {
-                tbody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-gray-500">No form leads received yet.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-slate-400">No form leads received yet.</td></tr>`;
                 return;
             }
             tbody.innerHTML = leads.map(l => `
-                <tr class="hover:bg-white/5 transition-colors">
-                    <td class="p-4 text-gray-400 whitespace-nowrap">${new Date(l.timestamp || Date.now()).toLocaleString()}</td>
-                    <td class="p-4 font-bold text-white">${escapeHtml(l.name || 'N/A')}</td>
-                    <td class="p-4 text-[#FF6B3D]">${escapeHtml(l.email || 'N/A')}</td>
-                    <td class="p-4 font-mono">${escapeHtml(l.phone || 'N/A')}</td>
-                    <td class="p-4"><span class="px-2 py-1 bg-green-500/20 text-green-400 rounded-md font-semibold">${escapeHtml(l.budget || 'N/A')}</span></td>
-                    <td class="p-4 max-w-xs truncate" title="${escapeHtml(l.message || l.requirement_details || '')}">${escapeHtml(l.message || l.requirement_details || 'N/A')}</td>
-                    <td class="p-4 text-gray-400">${escapeHtml(l.source || 'Website')}</td>
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="p-4 text-slate-500 whitespace-nowrap">${new Date(l.timestamp || Date.now()).toLocaleString()}</td>
+                    <td class="p-4 font-bold text-slate-900">${escapeHtml(l.name || 'N/A')}</td>
+                    <td class="p-4 font-medium text-[#FF5625]">${escapeHtml(l.email || 'N/A')}</td>
+                    <td class="p-4 font-mono text-slate-600">${escapeHtml(l.phone || 'N/A')}</td>
+                    <td class="p-4"><span class="px-2.5 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-md font-bold">${escapeHtml(l.budget || 'N/A')}</span></td>
+                    <td class="p-4 max-w-xs truncate text-slate-600" title="${escapeHtml(l.message || l.requirement_details || '')}">${escapeHtml(l.message || l.requirement_details || 'N/A')}</td>
+                    <td class="p-4 text-slate-500">${escapeHtml(l.source || 'Website')}</td>
                     <td class="p-4 text-right">
-                        <button onclick="deleteLead('form', '${l.id}')" class="text-red-400 hover:text-red-300 font-medium">Delete</button>
+                        <button onclick="deleteLead('form', '${l.id || l.timestamp}')" class="px-2.5 py-1 rounded-lg text-red-600 hover:bg-red-50 font-semibold transition-colors cursor-pointer">Delete</button>
                     </td>
                 </tr>
             `).join('');
@@ -178,16 +308,16 @@
         function renderSubLeads(subs) {
             const tbody = document.getElementById('sub-leads-tbody');
             if (!subs.length) {
-                tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-gray-500">No newsletter subscribers yet.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-slate-400">No newsletter subscribers yet.</td></tr>`;
                 return;
             }
             tbody.innerHTML = subs.map(s => `
-                <tr class="hover:bg-white/5 transition-colors">
-                    <td class="p-4 text-gray-400 whitespace-nowrap">${new Date(s.timestamp || Date.now()).toLocaleString()}</td>
-                    <td class="p-4 font-bold text-[#FF6B3D]">${escapeHtml(s.email || 'N/A')}</td>
-                    <td class="p-4 text-gray-400">${escapeHtml(s.source || 'Footer')}</td>
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="p-4 text-slate-500 whitespace-nowrap">${new Date(s.timestamp || Date.now()).toLocaleString()}</td>
+                    <td class="p-4 font-bold text-[#FF5625]">${escapeHtml(s.email || 'N/A')}</td>
+                    <td class="p-4 text-slate-500">${escapeHtml(s.source || 'Footer')}</td>
                     <td class="p-4 text-right">
-                        <button onclick="deleteLead('sub', '${s.id}')" class="text-red-400 hover:text-red-300 font-medium">Delete</button>
+                        <button onclick="deleteLead('sub', '${s.id || s.timestamp}')" class="px-2.5 py-1 rounded-lg text-red-600 hover:bg-red-50 font-semibold transition-colors cursor-pointer">Delete</button>
                     </td>
                 </tr>
             `).join('');
@@ -201,13 +331,13 @@
             const secSub = document.getElementById('section-sub-leads');
 
             if (tab === 'form') {
-                btnForm.className = 'px-5 py-2 text-xs font-bold rounded-lg text-white bg-[#FF6B3D] transition-all';
-                btnSub.className = 'px-5 py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition-all';
+                btnForm.className = 'px-5 py-2 text-xs font-bold rounded-lg text-white btn-lava shadow-sm transition-all cursor-pointer';
+                btnSub.className = 'px-5 py-2 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900 transition-all cursor-pointer';
                 secForm.classList.remove('hidden');
                 secSub.classList.add('hidden');
             } else {
-                btnSub.className = 'px-5 py-2 text-xs font-bold rounded-lg text-white bg-[#FF6B3D] transition-all';
-                btnForm.className = 'px-5 py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition-all';
+                btnSub.className = 'px-5 py-2 text-xs font-bold rounded-lg text-white btn-lava shadow-sm transition-all cursor-pointer';
+                btnForm.className = 'px-5 py-2 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900 transition-all cursor-pointer';
                 secSub.classList.remove('hidden');
                 secForm.classList.add('hidden');
             }
@@ -220,6 +350,7 @@
                     (l.name && l.name.toLowerCase().includes(query)) ||
                     (l.email && l.email.toLowerCase().includes(query)) ||
                     (l.phone && l.phone.toLowerCase().includes(query)) ||
+                    (l.budget && l.budget.toLowerCase().includes(query)) ||
                     (l.message && l.message.toLowerCase().includes(query))
                 );
                 renderFormLeads(filtered);
@@ -233,10 +364,17 @@
             if (!confirm('Are you sure you want to delete this lead?')) return;
             try {
                 await fetch(`/api/admin/leads/${type}/${id}`, { method: 'DELETE' });
-                fetchLeads();
-            } catch (err) {
-                console.error('Delete lead error:', err);
+            } catch (err) {}
+            
+            // Also clean from localStorage
+            if (type === 'form') {
+                allFormLeads = allFormLeads.filter(l => (l.id !== id && l.timestamp !== id));
+                localStorage.setItem('smartfiq_form_leads', JSON.stringify(allFormLeads));
+            } else {
+                allSubLeads = allSubLeads.filter(s => (s.id !== id && s.timestamp !== id));
+                localStorage.setItem('smartfiq_sub_leads', JSON.stringify(allSubLeads));
             }
+            fetchLeads();
         }
 
         function exportCSV() {
@@ -244,12 +382,12 @@
             if (activeTab === 'form') {
                 csvContent += "Date,Name,Email,Phone,Budget,Message,Source\n";
                 allFormLeads.forEach(l => {
-                    csvContent += `"${l.timestamp}","${l.name || ''}","${l.email || ''}","${l.phone || ''}","${l.budget || ''}","${(l.message || '').replace(/"/g, '""')}","${l.source || ''}"\n`;
+                    csvContent += `"${l.timestamp || ''}","${l.name || ''}","${l.email || ''}","${l.phone || ''}","${l.budget || ''}","${(l.message || l.requirement_details || '').replace(/"/g, '""')}","${l.source || ''}"\n`;
                 });
             } else {
                 csvContent += "Date,Subscriber Email,Source\n";
                 allSubLeads.forEach(s => {
-                    csvContent += `"${s.timestamp}","${s.email || ''}","${s.source || ''}"\n`;
+                    csvContent += `"${s.timestamp || ''}","${s.email || ''}","${s.source || ''}"\n`;
                 });
             }
             const encodedUri = encodeURI(csvContent);
@@ -262,10 +400,10 @@
         }
 
         function escapeHtml(str) {
-            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+            return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
 
-        document.addEventListener('DOMContentLoaded', fetchLeads);
+        document.addEventListener('DOMContentLoaded', checkAuth);
     </script>
 </body>
 </html>
