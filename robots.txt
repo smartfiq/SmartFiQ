@@ -1,8 +1,36 @@
+# SmartFiQ Robots.txt
+# Domain: https://smartfiq.website
+
 User-agent: *
 Allow: /
-
 Disallow: /admin
+Disallow: /admin.html
 Disallow: /api/
 
-Sitemap: https://smartfiq.website/sitemap.xml
+# Explicitly Allow Major AI & Search Engine Crawlers
+User-agent: Googlebot
+Allow: /
 
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Anthropic-AI
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+# Canonical Sitemap URL
+Sitemap: https://smartfiq.website/sitemap.xml

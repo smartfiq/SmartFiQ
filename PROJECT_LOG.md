@@ -108,3 +108,13 @@
      - **Password:** `smartfiqlead`
   3. Stored session state in `sessionStorage` with a clean Logout button and error handling.
   4. Synchronized all changes to `templates/admin.html`.
+
+---
+
+### Step 9: Robots.txt & Google Search Console Sitemap Configuration
+- **Date:** 14 Aug 2026
+- **Files Modified:** `robots.txt`, `PROJECT_LOG.md`
+- **What was done:**
+  1. Corrected Sitemap URL in `robots.txt` from dummy domain to canonical `https://smartfiq.website/sitemap.xml`.
+  2. Configured search & AI crawler permissions (Googlebot, GPTBot, Claude, Perplexity, CCBot).
+  3. Maintained security disallows on `/admin`, `/admin.html`, and `/api/` to protect customer lead confidentiality.
